@@ -5,8 +5,8 @@ from tkinter import messagebox
 
 class MohrStuff:
 
-    def __init__(self):
-        self.root = tk.Toplevel()
+    def __init__(self, root):
+        self.root = root
 
         self.root.protocol('WM_DELETE_WINDOW', self.on_closing)
 
@@ -66,3 +66,7 @@ class MohrStuff:
     def on_closing(self):
         if messagebox.askyesno(message='Are you sure you want to Quit?'):
             self.root.destroy()
+
+if __name__ == '__main__':
+    page1 = tk.Toplevel()
+    MohrStuff(page1)

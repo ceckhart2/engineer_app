@@ -2,6 +2,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+
 matplotlib.use('TkAgg')
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
@@ -39,24 +40,34 @@ class MohrsCircle:
             return math.fabs(round(math.degrees(math.atan(self.tauxy / (self.sigma_avg() - self.sigmay))), 2))
 
     # Creates plot of data
-    def circle_plot(self):
+    def circle_plot(self, angle=90):
+        # Creating sigma, tau prime based on rotated angle.
+        sigmax_prime = round((self.sigmax + self.sigmay) / 2 + (self.sigmax - self.sigmay) / 2 * (
+            math.cos(2 * math.radians(angle))) + self.tauxy * math.sin(2 * math.radians(angle)), 2)
+        sigmay_prime = round((self.sigmax + self.sigmay) / 2 - (self.sigmax - self.sigmay) / 2 * (
+            math.cos(2 * math.radians(angle))) - self.tauxy * math.sin(2 * math.radians(angle)), 2)
+        tauxy_prime = round(-(self.sigmax - self.sigmay) / 2 * math.sin(2 * math.radians(angle)) + self.tauxy * (
+            math.cos(2 * math.radians(angle))), 2)
+
         radians = (np.linspace(0, 360, 361)) * math.pi / 180
         sigma_points = self.sigma_avg() + self.radius() * np.cos(radians)
         tau_points = self.radius() * np.sin(radians)
 
-        fig = plt.figure(figsize=[6, 6])
+        fig = plt.figure(figsize=[7, 7], constrained_layout=True)
         # Plots points of relevant data
         plt.plot(sigma_points, tau_points)
-        plt.plot([self.sigma_avg(), self.sigmax, self.sigmax, self.sigma_avg()], [0, 0, self.tauxy, 0], 'bo-')
-        plt.plot([self.sigma_avg(), self.sigmay, self.sigmay, self.sigma_avg()], [0, 0, -self.tauxy, 0], 'bo-')
+        plt.plot([self.sigma_avg(), sigmax_prime, sigmax_prime, self.sigma_avg()], [0, 0, tauxy_prime, 0], 'bo-')
+        plt.plot([self.sigma_avg(), sigmay_prime, sigmay_prime, self.sigma_avg()], [0, 0, -tauxy_prime, 0], 'bo-')
         plt.plot(self.sigma_1(), 0, color='r')
         plt.plot(self.sigma_2(), 0)
 
         # Puts text on important points
-        plt.text(self.sigmax, self.tauxy, f'{self.sigmax}, {self.tauxy}', verticalalignment='top', color='r',
-                 weight=1000)
-        plt.text(self.sigmay, -self.tauxy, f'{self.sigmay}, {-self.tauxy}', verticalalignment='top', color='r',
-                 weight=1000)
+        plt.text(sigmax_prime, tauxy_prime, f'{sigmax_prime}, {tauxy_prime}', verticalalignment='bottom',
+                 horizontalalignment='center', color='r',weight=1000)
+
+        plt.text(sigmay_prime, -tauxy_prime, f'{sigmay_prime}, {-tauxy_prime}', verticalalignment='bottom',
+                 horizontalalignment='center', color='r', weight=1000)
+
         plt.text(self.sigma_avg(), 0, self.sigma_avg(), weight=1000, color='r')
 
         # Misc. chart edits
@@ -66,9 +77,12 @@ class MohrsCircle:
         plt.ylabel(f'τ ({self.units})')
         plt.gca().invert_yaxis()
         plt.legend(
-            [f'Taumax: {self.taumax()}\nSigma1: {self.sigma_1()}\nSigma2: {self.sigma_2()}\nAngle:{self.angle()}'],
+            [f'Taumax: {self.taumax()}\nSigma1: {self.sigma_1()}\nSigma2: {self.sigma_2()}\nAngle:{self.angle()}°'],
             bbox_to_anchor=(0.68, 1.155), loc='upper left', ncol=1, fontsize=6, prop=dict(weight='bold'))
+        plt.close()
         return fig
+
+
 
 
 # Defines User Inuts
@@ -77,7 +91,6 @@ if __name__ == '__main__':
     # sigmay = float(input('Enter Sigma Y: '))
     # tauxy = float(input('Enter TauXY: '))
     # units = input('Enter unit type: ')
-    m1 = MohrsCircle(50,25, 100, units='Kpa')
+    m1 = MohrsCircle(-100, 100, 200, units='Kpa')
     m1.circle_plot()
     print('Plotting...')
-

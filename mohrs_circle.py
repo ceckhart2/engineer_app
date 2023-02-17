@@ -60,12 +60,13 @@ class MohrsCircle:
         plt.plot([self.sigma_avg(), sigmay_prime, sigmay_prime, self.sigma_avg()], [0, 0, -tauxy_prime, 0], 'bo-')
         plt.plot(self.sigma_1(), 0, color='r')
         plt.plot(self.sigma_2(), 0)
+        plt.axhline(0, color='black')
 
         # Puts text on important points
-        plt.text(sigmax_prime, tauxy_prime, f'{sigmax_prime}, {tauxy_prime}', verticalalignment='bottom',
+        plt.text(sigmax_prime, tauxy_prime, f'({sigmax_prime}, {tauxy_prime})', verticalalignment='bottom',
                  horizontalalignment='center', color='r',weight=1000)
 
-        plt.text(sigmay_prime, -tauxy_prime, f'{sigmay_prime}, {-tauxy_prime}', verticalalignment='bottom',
+        plt.text(sigmay_prime, -tauxy_prime, f'({sigmay_prime}, {-tauxy_prime})', verticalalignment='bottom',
                  horizontalalignment='center', color='r', weight=1000)
 
         plt.text(self.sigma_avg(), 0, self.sigma_avg(), weight=1000, color='r')

@@ -30,8 +30,10 @@ class ConversionPage:
         button_length = tk.Button(self.button_container, text='Length', highlightbackground='#1E3087',
                                   command=lambda: self.create_entry(self.entry_container, category='length'))
 
-        button_time = tk.Button(self.button_container, text='Time', highlightbackground='#1E3087')
-        button_mass = tk.Button(self.button_container, text='Mass', highlightbackground='#1E3087')
+        button_time = tk.Button(self.button_container, text='Time', highlightbackground='#1E3087',
+                                command=lambda: self.create_entry(self.entry_container, category='time'))
+        button_mass = tk.Button(self.button_container, text='Mass', highlightbackground='#1E3087',
+                                command=lambda: self.create_entry(self.entry_container, category='mass'))
         button_custom = tk.Button(self.button_container, text='Custom', bg='blue', highlightbackground='#1E3087')
 
         self.buttons = [button_temp, button_length, button_time, button_mass, button_custom]
@@ -88,6 +90,24 @@ class EntryForum:
 
     def length(self):
         options = ['mile', 'yard', 'ft', 'in', 'lightyear']
+
+        dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
+        dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
+
+        dropdown1.grid(row=0, column=1)
+        dropdown2.grid(row=0, column=4)
+
+    def time(self):
+        options = ['year', 'month', 'week', 'day', 'hour', 'min', 'second', 'millisecond', 'microsecond', 'nanosecond']
+
+        dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
+        dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
+
+        dropdown1.grid(row=0, column=1)
+        dropdown2.grid(row=0, column=4)
+
+    def mass(self):
+        options = ['kip', 'lb', 'kg', 'g', 'mg', 'mcg']
 
         dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
         dropdown2 = tk.OptionMenu(self.master, self.option2, *options)

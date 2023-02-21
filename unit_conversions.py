@@ -27,7 +27,9 @@ class ConversionPage:
                                 command=lambda: self.create_entry(self.entry_container, category='temp'),
                                 highlightbackground='#1E3087')
 
-        button_length = tk.Button(self.button_container, text='Length', highlightbackground='#1E3087')
+        button_length = tk.Button(self.button_container, text='Length', highlightbackground='#1E3087',
+                                  command=lambda: self.create_entry(self.entry_container, category='length'))
+
         button_time = tk.Button(self.button_container, text='Time', highlightbackground='#1E3087')
         button_mass = tk.Button(self.button_container, text='Mass', highlightbackground='#1E3087')
         button_custom = tk.Button(self.button_container, text='Custom', bg='blue', highlightbackground='#1E3087')
@@ -44,6 +46,9 @@ class ConversionPage:
         # Conversion Function
 
     def create_entry(self, master, category):
+        # Prevents duplicated frame object
+        for child in self.entry_container.winfo_children():
+            child.destroy()
         e1 = EntryForum(master)
         getattr(e1, category)()
 
@@ -74,14 +79,24 @@ class EntryForum:
 
     def temp(self):
         options = ['°F', '°C', '°K', '°R']
-       
-        self.dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
-        self.dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
 
-        self.dropdown1.grid(row=0, column=1)
-        self.dropdown2.grid(row=0, column=4)
+        dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
+        dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
 
-    def convert(self, value, unit0, unit1):
+        dropdown1.grid(row=0, column=1)
+        dropdown2.grid(row=0, column=4)
+
+    def length(self):
+        options = ['mile', 'yard', 'ft', 'in', 'lightyear']
+
+        dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
+        dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
+
+        dropdown1.grid(row=0, column=1)
+        dropdown2.grid(row=0, column=4)
+
+    @staticmethod
+    def convert(value, unit0, unit1):
         """
         Converts Given value in starting units to ending units
 
@@ -90,7 +105,7 @@ class EntryForum:
         :param unit1:
         :return:
         """
-        # Making Pint Unit Regisry Object
+
         ureg = UnitRegistry()
         try:
             value = float(value)
@@ -100,10 +115,10 @@ class EntryForum:
         try:
             to_convert = ureg.Quantity(value, ureg[unit0])
             converted = to_convert.to(ureg[unit1])
-            return round(converted.magnitude, 2)
+            return format(converted.magnitude, '.3g')
 
         except:
-            return round(value, 2)
+            return value
 
     def callback(self):
         """

@@ -26,15 +26,14 @@ class ConversionPage:
         button_temp = tk.Button(self.button_container, text='Temp',
                                 command=lambda: self.create_entry(self.entry_container, category='temp'),
                                 highlightbackground='#1E3087')
-
         button_length = tk.Button(self.button_container, text='Length', highlightbackground='#1E3087',
                                   command=lambda: self.create_entry(self.entry_container, category='length'))
-
         button_time = tk.Button(self.button_container, text='Time', highlightbackground='#1E3087',
                                 command=lambda: self.create_entry(self.entry_container, category='time'))
         button_mass = tk.Button(self.button_container, text='Mass', highlightbackground='#1E3087',
                                 command=lambda: self.create_entry(self.entry_container, category='mass'))
-        button_custom = tk.Button(self.button_container, text='Custom', bg='blue', highlightbackground='#1E3087')
+        button_custom = tk.Button(self.button_container, text='Custom', bg='blue', highlightbackground='#1E3087',
+                                  command=lambda: self.create_entry(self.entry_container, category='custom'))
 
         self.buttons = [button_temp, button_length, button_time, button_mass, button_custom]
         [item.grid(row=0, column=index, sticky=tk.NSEW) for index, item in enumerate(self.buttons)]
@@ -64,8 +63,9 @@ class EntryForum:
         e1_trace = entr1_var.trace('w', lambda name, index, mode, e1=entr1_var: self.callback())
 
         # Creates entry box and answer label
-        self.entry1 = tk.Entry(self.master, bg='black', highlightbackground='#1E3087', textvariable=entr1_var)
-        self.label_answer = tk.Label(self.master, bg='grey', width=10)
+        self.entry1 = tk.Entry(self.master, bg='black', highlightbackground='#1E3087', textvariable=entr1_var, width=15)
+
+        self.label_answer = tk.Label(self.master, bg='grey', width=15)
 
         self.option1 = tk.StringVar()
         self.option2 = tk.StringVar()
@@ -74,10 +74,14 @@ class EntryForum:
 
         self.label_eq = tk.Label(self.master, text='=', font=('Arial', 20), bg='#1E3087')
 
+        self.master.pack(pady=20, padx=10)
+
+
+
+
         self.entry1.grid(row=0, column=0, padx=5)
         self.label_eq.grid(row=0, column=2, padx=5)
         self.label_answer.grid(row=0, column=3, padx=5)
-        self.master.pack(pady=20)
 
     def temp(self):
         options = ['°F', '°C', '°K', '°R']
@@ -88,32 +92,62 @@ class EntryForum:
         dropdown1.grid(row=0, column=1)
         dropdown2.grid(row=0, column=4)
 
+
     def length(self):
-        options = ['mile', 'yard', 'ft', 'in', 'lightyear']
+        options = ['lightyear', 'mile', 'yard', 'foot', 'inch', 'kilometer', 'hectometer',
+                   'meter', 'decimeter', 'centimeter', 'millimeter', 'micrometer', 'nanometer']
 
         dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
         dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
 
         dropdown1.grid(row=0, column=1)
         dropdown2.grid(row=0, column=4)
+
 
     def time(self):
-        options = ['year', 'month', 'week', 'day', 'hour', 'min', 'second', 'millisecond', 'microsecond', 'nanosecond']
+        options = ['millennium', 'century', 'decade','year', 'month', 'week', 'day', 'hour', 'minute', 'second',
+                   'millisecond', 'microsecond', 'nanosecond']
 
         dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
         dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
 
         dropdown1.grid(row=0, column=1)
         dropdown2.grid(row=0, column=4)
+        self.master.pack(pady=20, padx=10)
+
 
     def mass(self):
-        options = ['kip', 'lb', 'kg', 'g', 'mg', 'mcg']
+        options = ['ton', 'kilopound', 'pound', 'tonne', 'kilogram', 'gram', 'milligram', 'microgram', 'nanogram']
 
         dropdown1 = tk.OptionMenu(self.master, self.option1, *options)
         dropdown2 = tk.OptionMenu(self.master, self.option2, *options)
 
         dropdown1.grid(row=0, column=1)
         dropdown2.grid(row=0, column=4)
+
+
+    def custom(self):
+        label_entry = tk.Label(self.master, text='Value', bg='#1E3087')
+        label_units1 = tk.Label(self.master, text='Units', bg='#1E3087')
+        label_units2 = tk.Label(self.master, text='Units', bg='#1E3087')
+
+
+        units_textbox = tk.Entry(self.master, bg='black', highlightbackground='#1E3087', textvariable=self.option1, width=10)
+        units_textbox2 = tk.Entry(self.master, bg='black', highlightbackground='#1E3087', textvariable=self.option2, width=10)
+
+        self.entry1.grid(row=1, column=0)
+        self.label_eq.grid(row=1, column=3)
+        self.label_answer.grid(row=1, column=4)
+
+        label_entry.grid(row=0, column=0)
+        label_units1.grid(row=0, column=1)
+        label_units2.grid(row=0, column=5)
+
+        units_textbox.grid(row=1, column=1)
+        units_textbox2.grid(row=1, column=5)
+
+
+
 
     @staticmethod
     def convert(value, unit0, unit1):
@@ -130,12 +164,15 @@ class EntryForum:
         try:
             value = float(value)
         except:
-            return np.NAN
+            if not value:
+                return 0
+            else:
+                return np.NAN
 
         try:
             to_convert = ureg.Quantity(value, ureg[unit0])
             converted = to_convert.to(ureg[unit1])
-            return format(converted.magnitude, '.3g')
+            return format(converted.magnitude, '.5g')
 
         except:
             return value

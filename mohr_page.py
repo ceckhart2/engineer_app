@@ -15,9 +15,9 @@ class MohrStuff:
         bg_label.place(x=0, y=0)
 
         # Change window size
-        self.root.geometry('740x740')
+        self.root.geometry('700x740')
 
-        self.entry_frame = tk.Frame(self.root)
+        self.entry_frame = tk.Frame(self.root, )
         self.entry_frame.columnconfigure(0, weight=1)
         self.entry_frame.columnconfigure(1, weight=3)
 

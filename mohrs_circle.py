@@ -40,7 +40,7 @@ class MohrsCircle:
             return math.fabs(round(math.degrees(math.atan(self.tauxy / (self.sigma_avg() - self.sigmay))), 2))
 
     # Creates plot of data
-    def circle_plot(self, angle=90):
+    def circle_plot(self, angle=0):
         # Creating sigma, tau prime based on rotated angle.
         sigmax_prime = round((self.sigmax + self.sigmay) / 2 + (self.sigmax - self.sigmay) / 2 * (
             math.cos(2 * math.radians(angle))) + self.tauxy * math.sin(2 * math.radians(angle)), 2)
@@ -53,7 +53,7 @@ class MohrsCircle:
         sigma_points = self.sigma_avg() + self.radius() * np.cos(radians)
         tau_points = self.radius() * np.sin(radians)
 
-        fig = plt.figure(figsize=[7, 7], constrained_layout=True)
+        fig = plt.figure(figsize=[7, 8], constrained_layout=True)
         # Plots points of relevant data
         plt.plot(sigma_points, tau_points)
         plt.plot([self.sigma_avg(), sigmax_prime, sigmax_prime, self.sigma_avg()], [0, 0, tauxy_prime, 0], 'bo-')

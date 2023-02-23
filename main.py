@@ -1,7 +1,7 @@
 import tkinter as tk
 from mohr_page import MohrStuff
 from tkinter import messagebox
-
+from unit_conversions import ConversionPage
 
 class MasterTk:
     # Initialize page details
@@ -17,10 +17,14 @@ class MasterTk:
 
         title = tk.Label(self.master, text='Main Menu', font=('Arial', 25))
 
+        #Buttons for other pages
         mohr_button = tk.Button(self.master, text="Mohr's Circle", command=self.open_mohr)
+        conversion_button = tk.Button(self.master, text="Unit Conversions", command=self.open_conversion)
+
 
         title.pack()
         mohr_button.pack(pady=10)
+        conversion_button.pack()
 
         self.master.mainloop()
 
@@ -30,6 +34,9 @@ class MasterTk:
 
     def open_mohr(self):
         mohr_page = MohrStuff()
+
+    def open_conversion(self):
+        c1 = ConversionPage()
 
 
 if __name__ == '__main__':
